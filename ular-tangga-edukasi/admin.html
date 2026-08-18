@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Ular Tangga Edukasi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+
+<div id="admin-app">
+
+  <!-- ===== LOGIN ===== -->
+  <section id="login-screen" class="screen">
+    <div class="setup-card">
+      <h1>Panel Admin</h1>
+      <p class="tagline">Masukkan password admin untuk masuk</p>
+      <div class="field">
+        <label for="admin-password">Password</label>
+        <input type="password" id="admin-password" placeholder="Password admin">
+      </div>
+      <div id="login-error" class="error-text hidden"></div>
+      <button id="login-btn" class="btn btn-primary">Masuk</button>
+      <a href="index.html" class="admin-link">← Kembali ke permainan</a>
+    </div>
+  </section>
+
+  <!-- ===== DASHBOARD ===== -->
+  <section id="dashboard-screen" class="screen hidden admin-dashboard">
+    <header class="admin-header">
+      <h1>Panel Admin — Ular Tangga Edukasi</h1>
+      <a href="index.html" class="btn btn-ghost">← Ke Permainan</a>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="tab-appearance">Papan &amp; Tampilan</button>
+      <button class="tab-btn" data-tab="tab-questions">Bank Soal</button>
+      <button class="tab-btn" data-tab="tab-account">Akun Admin</button>
+    </nav>
+
+    <!-- --- TAB: PAPAN & TAMPILAN --- -->
+    <div id="tab-appearance" class="tab-panel">
+      <div class="panel-card">
+        <h2>Pengaturan Papan</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label>Judul Permainan</label>
+            <input type="text" id="cfg-title">
+          </div>
+          <div class="field">
+            <label>Jumlah Kotak (papan)</label>
+            <input type="number" id="cfg-boardsize" min="10" max="200">
+          </div>
+          <div class="field">
+            <label>Maksimal Pemain</label>
+            <input type="number" id="cfg-maxplayers" min="2" max="4">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Nomor kotak yang berisi soal (pisahkan dengan koma)</label>
+          <textarea id="cfg-questionboxes" rows="2" placeholder="Contoh: 3,6,9,12,15"></textarea>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Tangga (format: kotakAsal=kotakTujuan, satu per baris)</label>
+            <textarea id="cfg-ladders" rows="4" placeholder="4=14&#10;9=22"></textarea>
+          </div>
+          <div class="field">
+            <label>Ular (format: kotakAsal=kotakTujuan, satu per baris)</label>
+            <textarea id="cfg-snakes" rows="4" placeholder="17=7&#10;25=13"></textarea>
+          </div>
+        </div>
+
+        <h2>Tampilan / Warna</h2>
+        <div class="grid-colors">
+          <div class="color-field"><label>Warna Utama</label><input type="color" id="theme-primaryColor"></div>
+          <div class="color-field"><label>Warna Aksen</label><input type="color" id="theme-accentColor"></div>
+          <div class="color-field"><label>Warna Benar</label><input type="color" id="theme-correctColor"></div>
+          <div class="color-field"><label>Warna Salah</label><input type="color" id="theme-wrongColor"></div>
+          <div class="color-field"><label>Warna Kotak</label><input type="color" id="theme-cellColor"></div>
+          <div class="color-field"><label>Warna Kotak Soal</label><input type="color" id="theme-questionCellColor"></div>
+        </div>
+
+        <button id="save-config-btn" class="btn btn-primary btn-inline">Simpan Pengaturan</button>
+        <span id="config-save-status" class="save-status"></span>
+      </div>
+    </div>
+
+    <!-- --- TAB: BANK SOAL --- -->
+    <div id="tab-questions" class="tab-panel hidden">
+      <div class="panel-card">
+        <h2 id="question-form-title">Tambah Soal Satuan</h2>
+        <input type="hidden" id="edit-question-id">
+        <div class="field">
+          <label>Pertanyaan</label>
+          <input type="text" id="q-text" placeholder="Tulis pertanyaan di sini">
+        </div>
+        <div class="grid-2">
+          <div class="field"><label>Opsi A</label><input type="text" id="q-optA"></div>
+          <div class="field"><label>Opsi B</label><input type="text" id="q-optB"></div>
+          <div class="field"><label>Opsi C</label><input type="text" id="q-optC"></div>
+          <div class="field"><label>Opsi D</label><input type="text" id="q-optD"></div>
+        </div>
+        <div class="field">
+          <label>Jawaban Benar</label>
+          <select id="q-correct">
+            <option value="0">Opsi A</option>
+            <option value="1">Opsi B</option>
+            <option value="2">Opsi C</option>
+            <option value="3">Opsi D</option>
+          </select>
+        </div>
+        <button id="save-question-btn" class="btn btn-primary btn-inline">Simpan Soal</button>
+        <button id="cancel-edit-btn" class="btn btn-ghost btn-inline hidden">Batal Edit</button>
+        <span id="question-save-status" class="save-status"></span>
+      </div>
+
+      <div class="panel-card">
+        <h2>Tambah Soal Massal</h2>
+        <p class="hint">Satu soal per baris, format: <code>Pertanyaan|Opsi A|Opsi B|Opsi C|Opsi D|IndeksBenar</code><br>
+        IndeksBenar: 0=A, 1=B, 2=C, 3=D. Contoh: <code>Ibu kota Indonesia?|Bandung|Jakarta|Medan|Bali|1</code></p>
+        <textarea id="bulk-questions" rows="6" placeholder="Pertanyaan|Opsi A|Opsi B|Opsi C|Opsi D|IndeksBenar"></textarea>
+        <button id="bulk-add-btn" class="btn btn-primary btn-inline">Tambah Semua</button>
+        <span id="bulk-save-status" class="save-status"></span>
+      </div>
+
+      <div class="panel-card">
+        <h2>Daftar Soal (<span id="question-count">0</span>)</h2>
+        <div id="question-table" class="question-table"></div>
+      </div>
+    </div>
+
+    <!-- --- TAB: AKUN ADMIN --- -->
+    <div id="tab-account" class="tab-panel hidden">
+      <div class="panel-card">
+        <h2>Ganti Password Admin</h2>
+        <div class="field">
+          <label>Password Baru</label>
+          <input type="password" id="new-password">
+        </div>
+        <button id="change-password-btn" class="btn btn-primary btn-inline">Ganti Password</button>
+        <span id="password-save-status" class="save-status"></span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
